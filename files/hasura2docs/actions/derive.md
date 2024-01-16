@@ -1,0 +1,159 @@
+# Derive Actions
+
+## Introduction​
+
+It is a typical requirement to run some custom business logic before actually executing a mutation / query, for example,
+to perform validations or to enrich some data from an external source. Actions can be used to achieve this.
+
+To help with creation of such actions, Hasura lets you derive an action from an existing query or mutation by:
+
+- Auto-generating the GraphQL types defining the action
+- Generating the handler code to delegate the action back to the original query or mutation after executing some
+business logic
+
+
+## Generate derived action GraphQL types​
+
+Hasura can generate the relevant GraphQL types required to define an action given a GraphQL operation.
+
+For example, let's say we would like to derive an action from the mutation:
+
+```
+mutation   insertAuthor   {
+   insert_author_one ( object :   {   name :   "Some name"   } )   {
+     id
+     name
+   }
+}
+```
+
+As the derived action will need to accept some arguments, we can convert the above mutation to use variables instead
+which can then become arguments to our derived action.
+
+```
+mutation   insertAuthor ( $name :   String )   {
+   insert_author_one ( object :   {   name :   $name   } )   {
+     id
+     name
+   }
+}
+```
+
+Now that we have a mutation with arguments being accepted as variables, we can derive our action:
+
+- Console
+- CLI
+
+
+Head to the `API` tab of the Console and paste / generate your query in the GraphiQL window.
+
+Next hit the `Derive action` button as shown below:
+
+Image: [ Console derive action button ](https://hasura.io/docs/assets/images/actions-derive-button-88bc002affdd40fa3a6095a97fb7cce8.png)
+
+This will redirect you to the `Add a new action` page with the Action definition auto-filled.
+
+Image: [ Console derived action types ](data:image/png;base64,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)
+
+To create the derived action, run:
+
+```
+hasura actions create insertAuthor --derive-from  'mutation insertAuthor($name: String) {
+     insert_author_one(
+       object: {
+         name: $name
+     }) {
+     id
+     name
+   }
+ }'
+```
+
+This will open up an editor with `metadata/actions.graphql` with the following action types auto filled.
+
+```
+type   Mutation   {
+   insertAuthor ( name :   String ) :   InsertAuthorOutput
+}
+type   InsertAuthorOutput   {
+   id :   Int !
+   name :   String !
+}
+```
+
+Note
+
+The action name will be picked up from the argument of the command and not the mutation string.
+
+Note
+
+- The derived output type will be derived from the actual output type of the original query or mutation and not the
+selection-set of the given query or mutation string.
+- As currently custom object types can only have scalar / enum fields any object type fields in the original output type
+will be dropped in the derived output type.
+
+
+## Generate handler code for a derived action​
+
+For a derived action, Hasura can generate the relevant handler code to delegate the action back to the original
+operation.
+
+- Console
+- CLI
+
+
+Head to the `Actions -> [action-name] -> Codegen` tab in the Console
+
+You can select the framework of your choice to get the corresponding handler boilerplate code.
+
+Image: [ Console derived action codegen ](https://hasura.io/docs/assets/images/actions-derive-codegen-49ee45e04c114368581825209b2525ac.png)
+
+Note
+
+The information about derived Actions are stored locally on the browser and hence it is currently only possible to
+generate the delegation code from the browser where the action was created.
+
+You will have to set up codegen in the CLI first to do this as explained in[ Generating handler code for your action ](https://hasura.io/docs/latest/actions/codegen/index/#actions-codegen-execute)
+
+After saving the GraphQL types generated by the `actions create` command in the previous section, the CLI will prompt you
+if you would like to generate the corresponding codegen files. Hit *y* to generate the codegen files with the
+delegation logic.
+
+The CLI does not persist information about derived Actions. Hence if you wish to generate the delegation code, you might
+want to pass the query or mutation string while running the codegen command:
+
+`hasura actions codegen  < action-name >  --derive-from  '<query/mutation string>'`
+
+## Hiding the original mutation in the API​
+
+Once a mutation is derived, you might want to hide it from your public GraphQL API but still want to use it from your
+action handler.
+
+To achieve this you can mark the mutation as `backend_only` so that it can be accessed only via "trusted sources". See[ Backend only ](https://hasura.io/docs/latest/auth/authorization/permissions/backend-only/)for more details
+
+Setting `backend-only` is currently available for insert, update and delete mutations.
+
+Additional Resources
+
+Introduction to Hasura Actions -[ View Recording ](https://hasura.io/events/webinar/hasura-actions/?pg=docs&plcmt=body&cta=view-recording&tech=).
+
+### What did you think of this doc?
+
+- [ Introduction ](https://hasura.io/docs/latest/actions/derive/#introduction)
+- [ Generate derived action GraphQL types ](https://hasura.io/docs/latest/actions/derive/#generate-derived-action-graphql-types)
+- [ Generate handler code for a derived action ](https://hasura.io/docs/latest/actions/derive/#generate-handler-code-for-a-derived-action)
+- [ Hiding the original mutation in the API ](https://hasura.io/docs/latest/actions/derive/#hiding-the-original-mutation-in-the-api)
+
+
+Image: [ Hasura Con ](https://res.cloudinary.com/dh8fp23nd/image/upload/v1686154570/hasura-con-2023/has-con-light-date_r2a2ud.png)
+
+Image: [ arrow-icon ](https://res.cloudinary.com/dh8fp23nd/image/upload/v1683723549/main-web/chevron-right_ldbi7d.png)
+
+### Start with GraphQL on Hasura for Free
+
+- Build apps and APIs 10x faster
+- Built-in authorization and caching
+- 8x more performant than hand-rolled APIs
+
+
+Image: [ Promo ](https://hasura.io/docs/assets/images/hasura-free-ff60e409244e0ea12b5a3045d1a9096b.png)

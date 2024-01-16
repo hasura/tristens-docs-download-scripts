@@ -1,0 +1,67 @@
+# SSO Through SAML
+
+## Introduction​
+
+You can enable SSO (Single Sign-On) with your identity management system through the[ SAML 2.0 ](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html)protocol. Hasura is a SAML
+2.0 compliant service provider.
+
+Image: [ Single Sign-On Login Demo ](https://hasura.io/docs/assets/images/SSO_Login_demo-1774ee1d7a266dcde8ece0c61fdddf4c.gif)
+
+## Configuration​
+
+### Configuring the identity provider​
+
+Create a new service provider on your SAML identity provider with the following configuration:
+
+1. Configure the ACS URL, Entity ID, Audience and Recipient to be `https://auth.pro.hasura.io/saml/callback` .
+2. Set the NameID format to `email address` .
+3. You can set the default Relay State to be `https://cloud.hasura.io/` .
+
+
+Once created, note the IdP metadata in XML format. Dynamic metadata through an IdP metadata URL is also supported.
+
+### Configuring Hasura Cloud as the service provider​
+
+Provide the following details to[ support ](https://cloud.hasura.io/support/create-ticket)to configure SAML SSO:
+
+- Domain Name(s): Domain tied to the email address of the users using SSO. If the emails of the users are tied to more
+than one domain, provide all the domains.
+- IdP Metadata: Metadata of your identity provider in XML format. If you want to configure the metadata through a
+dynamic URL, you can instead provide the IdP Metadata URL.
+- Provider: The name of this identity provider.
+- Request Signing: Specify if you want the SAML assertion request to signed or un-signed.
+
+
+## Caveats and limitations​
+
+1. Only a SP initiated flow is supported i.e. you can’t have a Launch button in your IdP dashboard to launch the project
+dashboard.
+2. Session expiry time is currently not configurable.
+3. Single logout is currently not supported.
+4. Once SSO is enabled for an org, it is enforced for that org. This means, if an org is enabled for SSO, the emails
+from that org cannot use any other login mechanism such as Google, GitHub, or email.
+5. Currently, only SAML with HTTP POST binding is supported.
+
+
+### What did you think of this doc?
+
+- [ Introduction ](https://hasura.io/docs/latest/hasura-cloud/sso/#introduction)
+- [ Configuration ](https://hasura.io/docs/latest/hasura-cloud/sso/#configuration)
+    - [ Configuring the identity provider ](https://hasura.io/docs/latest/hasura-cloud/sso/#configuring-the-identity-provider)
+
+- [ Configuring Hasura Cloud as the service provider ](https://hasura.io/docs/latest/hasura-cloud/sso/#configuring-hasura-cloud-as-the-service-provider)
+- [ Caveats and limitations ](https://hasura.io/docs/latest/hasura-cloud/sso/#caveats-and-limitations)
+
+
+Image: [ Hasura Con ](https://res.cloudinary.com/dh8fp23nd/image/upload/v1686154570/hasura-con-2023/has-con-light-date_r2a2ud.png)
+
+Image: [ arrow-icon ](https://res.cloudinary.com/dh8fp23nd/image/upload/v1683723549/main-web/chevron-right_ldbi7d.png)
+
+### Start with GraphQL on Hasura for Free
+
+- Build apps and APIs 10x faster
+- Built-in authorization and caching
+- 8x more performant than hand-rolled APIs
+
+
+Image: [ Promo ](https://hasura.io/docs/assets/images/hasura-free-ff60e409244e0ea12b5a3045d1a9096b.png)

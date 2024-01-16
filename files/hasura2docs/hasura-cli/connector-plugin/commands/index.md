@@ -1,0 +1,81 @@
+# Commands
+
+## Overview​
+
+The Hasura CLI Data Connector plugin utilizes a typical command / flag syntax enabling you to quickly manage your Hasura Data Connector deployments. A typical
+command structure will follow this pattern:
+
+`hasura connector  < command >  -- < optional_flag >   "<optional_flag_value>"`
+
+A real-world example following this structure would be:
+
+`hasura connector create my-connector:v1 --github-repo-url https://github.com/hasura/weaviate_gdc/tree/main`
+
+This snippet illustrates the `create` command and the `github-repo-url` flag,
+and the value of the `github-repo-url` .
+
+## Getting help​
+
+At any time, you can use the `--help` flag on a certain command. Running `hasura connector --help` will return information on available commands and flags:
+
+```
+This Hasura CLI plugin enables deployment and management of custom Hasura Data Connector agents to Google Cloud Platform.
+      
+Further Reading:
+  - https://hasura.io/docs/latest/databases/data-connectors/
+  - https://github.com/hasura/graphql-engine/tree/master/dc-agents/reference
+  - https://github.com/hasura/graphql-engine/blob/master/dc-agents/DOCUMENTATION.md
+Usage:
+  connector [command]
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  create      Create a new Hasura Cloud connector using CLI
+  delete      Delete a Hasura Cloud connector.
+  help        Help about any command
+  list        List all Hasura Cloud data connectors owned by the user.
+  logs        Tails logs of a deployed custom Hasura data connector.
+  status      Prints the current status of the custom Hasura data connector deployment.
+  version     get version information of connector CLI
+Flags:
+  -h, --help   help for connector
+Use "connector [command] --help" for more information about a command.
+```
+
+Whereas running `hasura connector status --help` will return commands and flags specific to the `actions` category of commands:
+
+```
+This command prints the status of the custom Hasura Data Connector deployment. It also prints the image build logs, if they are available yet, of the image build from the source code from the GitHub repository.
+Further Reading:
+- https://hasura.io/docs/latest/databases/data-connectors/
+Usage:
+  connector status [connector-name] [flags]
+Examples:
+  # fetch deployment status of the custom connector with the name: my-custom-connector:v1
+  hasura connector status my-custom-connector:v1
+Flags:
+  -h, --help   help for status
+```
+
+hasura connector commands
+
+A complete list of all Data Connector plugin commands, including details and examples, can be found in the side navigation to the left
+under the Commands heading.
+
+### What did you think of this doc?
+
+- [ Overview ](https://hasura.io/docs/latest/hasura-cli/connector-plugin/commands/index/#overview)
+- [ Getting help ](https://hasura.io/docs/latest/hasura-cli/connector-plugin/commands/index/#getting-help)
+
+
+Image: [ Hasura Con ](https://res.cloudinary.com/dh8fp23nd/image/upload/v1686154570/hasura-con-2023/has-con-light-date_r2a2ud.png)
+
+Image: [ arrow-icon ](https://res.cloudinary.com/dh8fp23nd/image/upload/v1683723549/main-web/chevron-right_ldbi7d.png)
+
+### Start with GraphQL on Hasura for Free
+
+- Build apps and APIs 10x faster
+- Built-in authorization and caching
+- 8x more performant than hand-rolled APIs
+
+
+Image: [ Promo ](https://hasura.io/docs/assets/images/hasura-free-ff60e409244e0ea12b5a3045d1a9096b.png)
